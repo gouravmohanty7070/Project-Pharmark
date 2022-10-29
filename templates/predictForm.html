@@ -8,5 +8,26 @@
   </head>
   <body>
     predictForm
+
+    <form method="POST" action="/predict/">
+      {% csrf_token %}
+      <label>Choose</label>
+      <select name="input_type">
+        <option value="List of Strings">List of Strings</option>
+        <option value="Therapeutic Name">Therapeutic Name</option>
+        <option value="Molecular Name">Molecular Name</option></select
+      ><br />
+      <label>Input</label>
+      <input type="text" name="text_input" /><br />
+      <label>Select Country type</label>
+      <select name="countries">
+        {% for country in countries %}
+        <option value="{{country.country_name}}">
+          {{country.country_name}}
+        </option>
+        {% endfor %}</select
+      ><br />
+      <button type="submit">Predict</button>
+    </form>
   </body>
 </html>

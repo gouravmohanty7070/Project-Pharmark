@@ -1,4 +1,3 @@
-from tensorflow.keras.callbacks import LambdaCallback
 import numpy as np
 from keras.models import load_model
 from selenium import webdriver
@@ -7,8 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 # from webdriver_manager.firefox import GeckoDriverManager
 from selenium.webdriver.chrome.service import Service
-s=Service(r"C:\Users\rajag\Desktop\chromedriver.exe")
-driver = webdriver.Chrome(service=s)
+
 
 chars = ['\n', "'", 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', ' ','_','-','.','/','&','1','2','3','4','5','6','7','8','9','0','+','(',')','>','<','%','`']
 
@@ -17,12 +15,15 @@ indices_char = dict((i, c) for i, c in enumerate(chars))
 
 maxlen = 33
 minlen = 1
+max_names = 50
 
 model = load_model('model.h5')
 model_suffix = load_model('model_suffix.h5')
 
 def med_count(medlist):
     finallist=[]
+    s=Service(r"C:\Users\rajag\Desktop\chromedriver.exe")
+    driver = webdriver.Chrome(service=s)
     for med in medlist:
         driver.get('https://ipindiaonline.gov.in/tmrpublicsearch/frmmain.aspx')
         wait = WebDriverWait(driver, 10)
@@ -57,7 +58,7 @@ def print_name_generated(name):
 def print_list_generated(lst):
     print(lst, flush=True)
     
-def generate_new_names(*args):
+def generate_new_names(prefix):
 #     print("----------Generating names----------")
 
     # Add pre-padding of zeros in the input.
@@ -105,14 +106,13 @@ def generate_new_names(*args):
     return list_outputs
     
 # Function invoked at the end of each epoch. Prints generated names.
-callback = LambdaCallback(on_epoch_end=generate_new_names)
+#callback = LambdaCallback(on_epoch_end=generate_new_names)
 
 
-if __name__ == '__main__':
-    # model_instance = Model()
-    prefix = "ant" # Change the prefix as one likes 
-    max_names = 50 # The number of names of na
-    l1 = []
-    l1 = generate_new_names()
-    final_list = med_count(l1)
+    # # model_instance = Model()
+    # prefix = "ant" # Change the prefix as one likes 
+    #  # The number of names of na
+    # l1 = []
+    # l1 = generate_new_names(prefix)
+    # final_list = med_count(l1)
     

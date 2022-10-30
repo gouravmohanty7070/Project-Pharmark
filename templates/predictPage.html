@@ -8,5 +8,12 @@
   </head>
   <body>
     Predict Page
+
+    {% for key, values in names.items %}
+      <h2>{{key}}</h2>
+      {% for v in values %}
+        {{v}}
+      {% endfor %}
+    {% endfor %}
   </body>
 </html>

@@ -20,13 +20,13 @@
       <label>Input</label>
       <input type="text" name="text_input" /><br />
       <label>Select Country type</label>
-      <select name="countries">
+       <select name="countries">
         {% for country in countries %}
         <option value="{{country.country_name}}">
           {{country.country_name}}
         </option>
         {% endfor %}</select
-      ><br />
+      ><br /> 
       <button type="submit">Predict</button>
     </form>
   </body>

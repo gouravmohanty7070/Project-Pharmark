@@ -4,6 +4,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import Select
 # from webdriver_manager.firefox import GeckoDriverManager
 from selenium.webdriver.chrome.service import Service
 
@@ -29,7 +30,9 @@ def med_count(medlist):
         wait = WebDriverWait(driver, 10)
         # time.sleep(1)
         # driver.implicitly_wait(10)
-        wordmarkelem = driver.find_element(By.CSS_SELECTOR, "#ContentPlaceHolder1_TBWordmark")
+        select = Select(driver.find_element('id', 'ContentPlaceHolder1_DDLSearchType'))
+        select.select_by_value('PH')
+        wordmarkelem = driver.find_element(By.CSS_SELECTOR, "#ContentPlaceHolder1_TBPhonetic")
         classelem = driver.find_element(By.CSS_SELECTOR, "#ContentPlaceHolder1_TBClass")
         searchelem = driver.find_element(By.CSS_SELECTOR, "#ContentPlaceHolder1_BtnSearch")
         wordmarkelem.send_keys(med)
@@ -40,7 +43,7 @@ def med_count(medlist):
 
         count = count.split(' ')[-1]
 #         print(count)
-        if int(count) == 0:
+        if int(count) > 0 and int(count)<=80:         #range
             finallist.append(med)
     driver.close()
     return(finallist)

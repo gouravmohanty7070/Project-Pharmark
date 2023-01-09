@@ -1,8 +1,15 @@
 from django.shortcuts import render
-from .models import Country
+from .models import Country , Suggestions
+from .serializers import SuggestionsSerializers
+from rest_framework import viewsets
 from .utils import generate_new_names, med_count
 
 # Create your views here.
+
+class SuggestionViewSet(viewsets.ModelViewSet):
+   queryset = Suggestions.objects.all()
+   serializer_class = SuggestionsSerializers
+
 def homepage(request):
     return render(request, 'home.html')
 

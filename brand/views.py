@@ -5,7 +5,7 @@ from rest_framework import viewsets
 from rest_framework import generics , status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .utils import generate_new_names, med_count
+from .utils import generate_new_names, med_count , check_phonetically_sound
 
 # Create your views here.
 
@@ -38,6 +38,8 @@ class CreateSuggestionView(APIView):
             for prefix in listOfString:
                 print(prefix)
                 temp_list = generate_new_names(prefix=prefix)
+                temp_list=check_phonetically_sound(temp_list)
+
                 print(temp_list)
                 for word in temp_list:
                     if len(word)<3:

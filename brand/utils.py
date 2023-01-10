@@ -24,6 +24,19 @@ model = load_model('model.h5')
 model_suffix = load_model('model_suffix.h5')
 
 
+def check_phonetically_sound(names:list):
+    vowel = {'a','e','i','o','u'};
+    score_word={}
+    for name in names:
+        count=0
+        for x in range(0, len(name), 3):
+            if any(char in vowel for char in name[x:x+3]):
+                count+=1
+        score_word[name]=count/len(name)
+
+    score_word=list(dict(sorted(score_word.items(), key=lambda item: item[1],reverse=True)).keys())
+    return score_word
+
 def med_count(medlist):
     finallist = []
     s = Service(r"C:\Users\rajag\Desktop\chromedriver.exe")

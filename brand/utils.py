@@ -18,7 +18,7 @@ indices_char = dict((i, c) for i, c in enumerate(chars))
 
 maxlen = 33
 minlen = 1
-max_names = 50
+max_names = 2
 
 model = load_model('model.h5')
 model_suffix = load_model('model_suffix.h5')

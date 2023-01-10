@@ -22,9 +22,9 @@ class Country(models.Model):
 class Suggestions(models.Model):
     suggestionCode=models.CharField(max_length=5,default=generate_unique_code,unique=True)
     drugCode=models.CharField(max_length=5,default="",unique=True)
-    Approved=models.BooleanField(null=False,default=False)
+    Approved=models.BooleanField(default=False)
     createdAt=models.DateTimeField(auto_now_add=True)
-    listOfString=models.CharField(max_length=100,default="")
+    suggestionString=models.CharField(max_length=100,default="")
     names = models.TextField(null=True)
     country_name = models.CharField(max_length=100, default="india")
     def __str__(self) -> str:

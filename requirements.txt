@@ -4,4 +4,4 @@ selenium
 Django
 django-rest-auth
 djangorestframework
-
+django-session-timeout

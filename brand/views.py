@@ -1,7 +1,10 @@
 from django.shortcuts import render
 from .models import Country , Suggestions
-from .serializers import SuggestionsSerializers
+from .serializers import SuggestionsSerializers , CreateSuggestionsSerializers
 from rest_framework import viewsets
+from rest_framework import generics , status
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from .utils import generate_new_names, med_count
 
 # Create your views here.
@@ -9,6 +12,53 @@ from .utils import generate_new_names, med_count
 class SuggestionViewSet(viewsets.ModelViewSet):
    queryset = Suggestions.objects.all()
    serializer_class = SuggestionsSerializers
+
+class SuggestionView(generics.ListAPIView):
+    queryset= Suggestions.objects.all()
+    serializer_class = SuggestionsSerializers
+
+
+class CreateSuggestionView(APIView):
+    
+    serializer_class = CreateSuggestionsSerializers
+
+    def post(self,request,format=None):
+        if not self.request.session.exists(self.request.session.session_key):
+            self.request.session.create()
+        
+        serializer =  self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            country_name=serializer.data.get('country_name')
+            drugCode=serializer.data.get('drugCode')
+            suggestionString=serializer.data.get('suggestionString')
+            listOfString = suggestionString.split(",")
+            print(listOfString)
+            final_list_as_a_str = []
+            
+            for prefix in listOfString:
+                print(prefix)
+                temp_list = generate_new_names(prefix=prefix)
+                print(temp_list)
+                for word in temp_list:
+                    if len(word)<3:
+                        temp_list.remove(word)
+                final_list = med_count(temp_list)
+                temp_final_list_as_a_str = ",".join(final_list)
+                final_list_as_a_str.append(temp_final_list_as_a_str)
+            final_list_as_a_str = " . ".join(final_list_as_a_str)
+
+            
+            
+            suggestion=Suggestions(country_name=country_name,names=temp_final_list_as_a_str,drugCode=drugCode,suggestionString=suggestionString)
+            try:
+                suggestion.save()
+                return Response(SuggestionsSerializers(suggestion).data,status=status.HTTP_200_OK)
+            except:
+                print("Error occured")
+                raise Exception
+        return Response({'Bad Request': 'Invalid data...'}, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 def homepage(request):
     return render(request, 'home.html')

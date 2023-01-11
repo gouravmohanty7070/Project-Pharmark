@@ -1,3 +1,4 @@
+from tensorflow.keras.models import RMSprop 
 # from tensorflow.keras.models import Sequential
 # from tensorflow.keras.layers import Dense
 # from tensorflow.keras.layers import LSTM
@@ -256,8 +257,9 @@ def make_suffix_model_and_save(country:str):
     model = Sequential()
     model.add(LSTM(64, input_shape=(maxlen, len(chars))))
     model.add(Dense(len(chars), activation='softmax'))
-    model.compile(loss='categorical_crossentropy', optimizer=RMSprop(lr=0.01))
-    history = model.fit(x, y, batch_size=128, epochs=10, verbose=2, callbacks=[callback])
+    opt = keras.optimizers.Adam(learning_rate=0.01)
+    model.compile(loss='categorical_crossentropy', optimizer=opt)
+    model.fit(x, y, batch_size=128, epochs=10, verbose=2)
 
     # Insert a suffix of your business name (could be empty):
     suffix = "don"

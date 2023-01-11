@@ -5,8 +5,7 @@ from rest_framework import viewsets
 from rest_framework import generics , status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .utils import generate_new_names, med_count , check_phonetically_sound
-
+from .utils import generate_new_names, med_count , check_phonetically_sound , check_phonetically_sound , check_fuzzy_wuzzy , check_sound_similarity
 # Create your views here.
 
 class SuggestionViewSet(viewsets.ModelViewSet):
@@ -32,6 +31,8 @@ class CreateSuggestionView(APIView):
             country_name=serializer.data.get('country_name')
             drugCode=serializer.data.get('drugCode')
             suggestionString=serializer.data.get('suggestionString')
+            inputType=serializer.data.get('inputType')
+            inputTypePreference=serializer.data.get('inputTypePreference')
             listOfString = suggestionString.split(",")
             print(listOfString)
             final_list_as_a_str = []
@@ -52,7 +53,7 @@ class CreateSuggestionView(APIView):
 
             
             
-            suggestion=Suggestions(country_name=country_name,names=temp_final_list_as_a_str,drugCode=drugCode,suggestionString=suggestionString)
+            suggestion=Suggestions(country_name=country_name,names=temp_final_list_as_a_str,drugCode=drugCode,suggestionString=suggestionString,inputType=inputType,inputTypePreference=inputTypePreference)
             try:
                 suggestion.save()
                 print(SuggestionsSerializers(suggestion).data)

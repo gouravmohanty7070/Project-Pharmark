@@ -23,7 +23,65 @@ max_names = 10
 model = load_model('model.h5')
 model_suffix = load_model('model_suffix.h5')
 
+def get_name_of_all_drugs_from_a_country(country):
+    import pandas as pd
+    df = pd.read_csv('brand_name.csv')
+    names = list(df['Country'].drop_duplicates())
+    country = country.upper()
+    try:
+        if country not in names:
+            raise Exception
+    except:
+        country = "INDIA"
+        print("Invalid country name so changed to INDIA by default")
+    global all_drugs
+    all_drugs = df[df["Country"] == country]["Drug name"].to_list()
 
+
+def check_phonetically_sound(names:list):
+    vowel = {'a','e','i','o','u'};
+    score_word={}
+    for name in names:
+        count=0
+        for x in range(0, len(name), 3):
+            if any(char in vowel for char in name[x:x+3]):
+                count+=1
+        score_word[name]=count/len(name)
+
+    score_word=list(dict(sorted(score_word.items(), key=lambda item: item[1],reverse=True)).keys())
+    return score_word
+
+def check_fuzzy_wuzzy(word_list:list) -> list:
+    # here distance is lavenstein distance which is defined as insertion,deletion and substitution
+    from Levenshtein import distance
+    temp_list = []
+    for word1 in word_list:
+        input_ = word1.upper()
+        words = all_drugs
+
+        distances = [distance(input_, word) for word in words]
+        closest = min(distances)
+        print(closest)
+        print(words[distances.index(min(distances))])
+        if closest > 2:
+            temp_list.append(input_)
+    return temp_list
+
+def check_sound_similarity(word_list:list) -> list:
+    import jellyfish
+    temp_list = []
+    for word1 in word_list:
+        input_ = word1.upper()
+        words = all_drugs
+
+        distances = [jellyfish.match_rating_comparison(input_, word) for word in words]
+        number_of_true_val = sum(1 for x in distances if x)
+        print(number_of_true_val)
+        if number_of_true_val < 300:
+            temp_list.append(input_)
+    return temp_list
+
+    
 def check_phonetically_sound(names:list):
     vowel = {'a','e','i','o','u'};
     score_word={}

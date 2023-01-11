@@ -84,9 +84,33 @@ def predict(request):
                 names_dict[p] = final_list
             print(names_dict)
         elif request.POST['input_type'] == 'Therapeutic Name':
-            pass
+            params = request.POST['text_input']
+            list_params = []
+            for x in range(len(params)):
+                if x+3 > len(params):
+                    break
+                list_params.append(params[x:x+3])
+            if len(list_params[-1]) < 3:
+                list_params = list_params[ : -1]
+            for p in list_params:
+                temp_list = generate_new_names(p)
+                final_list = med_count(temp_list)
+                names_dict[p] = final_list
+            print(names_dict)
         elif request.POST['input_type'] == 'Molecular Name':
-            pass
+            params = request.POST['text_input']
+            list_params = []
+            for x in range(len(params)):
+                if x+3 > len(params):
+                    break
+                list_params.append(params[x:x+3])
+            if len(list_params[-1]) < 3:
+                list_params = list_params[ : -1]
+            for p in list_params:
+                temp_list = generate_new_names(p)
+                final_list = med_count(temp_list)
+                names_dict[p] = final_list
+            print(names_dict)
         context = {
             'names': names_dict,
         }

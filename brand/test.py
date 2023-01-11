@@ -8,7 +8,7 @@ def check_phonetically_sound(names:list):
                 count+=1
         score_word[name]=count/len(name)
 
-    score_word=list(dict(sorted(score_word.items(), key=lambda item: item[1],reverse=True)).keys())
+    score_word=dict(sorted(score_word.items(), key=lambda item: item[1],reverse=True)).items()
     return score_word
 
-print(check_phonetically_sound(('gosmfapsl','fsefsdedesds','jdsakdfs','skssasdnsdisdf','aeraeaf')))
+print(check_phonetically_sound(('zeser-tap,zeso-k,zesanid,zes-isp,zesrase-dft,zesoun-k')))

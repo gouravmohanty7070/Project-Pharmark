@@ -27,6 +27,7 @@ class CreateSuggestionView(APIView):
             self.request.session.create()
         
         serializer =  self.serializer_class(data=request.data)
+        print(request.data)
         if serializer.is_valid():
             country_name=serializer.data.get('country_name')
             drugCode=serializer.data.get('drugCode')
@@ -34,7 +35,6 @@ class CreateSuggestionView(APIView):
             listOfString = suggestionString.split(",")
             print(listOfString)
             final_list_as_a_str = []
-            
             for prefix in listOfString:
                 print(prefix)
                 temp_list = generate_new_names(prefix=prefix)
@@ -44,16 +44,18 @@ class CreateSuggestionView(APIView):
                 for word in temp_list:
                     if len(word)<3:
                         temp_list.remove(word)
-                final_list = med_count(temp_list)
+                        # TODO: add med_count
+                final_list = temp_list
                 temp_final_list_as_a_str = ",".join(final_list)
                 final_list_as_a_str.append(temp_final_list_as_a_str)
-            final_list_as_a_str = " . ".join(final_list_as_a_str)
+            final_list_as_a_str = ",".join(final_list_as_a_str)
 
             
             
             suggestion=Suggestions(country_name=country_name,names=temp_final_list_as_a_str,drugCode=drugCode,suggestionString=suggestionString)
             try:
                 suggestion.save()
+                print(SuggestionsSerializers(suggestion).data)
                 return Response(SuggestionsSerializers(suggestion).data,status=status.HTTP_200_OK)
             except:
                 print("Error occured")
@@ -80,8 +82,8 @@ def predict(request):
             params = request.POST['text_input'].split(',')
             for p in params:
                 temp_list = generate_new_names(p)
-                final_list = med_count(temp_list)
-                names_dict[p] = final_list
+            # final_list = med_count(temp_list)
+                names_dict[p] = temp_list
             print(names_dict)
         elif request.POST['input_type'] == 'Therapeutic Name':
             pass

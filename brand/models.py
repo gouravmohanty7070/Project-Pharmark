@@ -26,6 +26,8 @@ class Suggestions(models.Model):
     createdAt=models.DateTimeField(auto_now_add=True)
     suggestionString=models.CharField(max_length=100,default="")
     names = models.TextField(null=True)
+    inputType=models.TextField(default="listOfString",null=False)
+    inputTypePreference=models.TextField(default="listOfStringMolecular",null=False)
     country_name = models.CharField(max_length=100, default="india")
     def __str__(self) -> str:
         return str(self.country_name)

@@ -140,7 +140,7 @@ def print_list_generated(lst):
     print(lst, flush=True)
 
 
-def generate_new_names(prefix):
+def generate_new_names(prefix,inputTypePreference):
     #     print("----------Generating names----------")
 
     # Add pre-padding of zeros in the input.
@@ -159,7 +159,10 @@ def generate_new_names(prefix):
                 x_pred[0, t, char_indices[char]] = 1
 
         # Predict the probabilities of the next char.
-        preds = model.predict(x_pred, verbose=0)[0]
+        if inputTypePreference == "prefix":
+            preds = model.predict(x_pred, verbose=0)[0]
+        else:
+            preds = model_suffix.predict(x_pred, verbose=0)[0]
 
         # Chose one based on the distribution obtained in the output of the model.
         next_index = sample(preds)

@@ -39,22 +39,26 @@ class CreateSuggestionView(APIView):
             print(listOfString)
             final_list_as_a_str = []
             for prefix in listOfString:
-                print(prefix)
-                temp_list = generate_new_names(prefix=prefix)
+                # print(prefix)
+                if inputTypePreference == "prefix":
+                    prefix = prefix
+                else:
+                    prefix = prefix[::-1]
+                temp_list = generate_new_names(prefix=prefix,inputTypePreference= inputTypePreference)
                 temp_list=check_phonetically_sound(temp_list)
-
-                print(temp_list)
+                # print(temp_list)
                 for word in temp_list:
                     if len(word)<3:
                         temp_list.remove(word)
                 temp_list = check_fuzzy_wuzzy(temp_list)
                 temp_list = check_phonetically_sound(temp_list)
                 temp_list = check_sound_similarity(temp_list)
-                # temp_list = med_count(temp_list)
+                temp_list = med_count(temp_list)
                 final_list = temp_list
                 temp_final_list_as_a_str = ",".join(final_list)
                 final_list_as_a_str.append(temp_final_list_as_a_str)
             final_list_as_a_str = ",".join(final_list_as_a_str)
+            
 
             
             

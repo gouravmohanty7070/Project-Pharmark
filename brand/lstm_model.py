@@ -1,14 +1,14 @@
-from tensorflow.keras.models import RMSprop 
+# from tensorflow.keras.optimizers import RMSprop
 # from tensorflow.keras.models import Sequential
 # from tensorflow.keras.layers import Dense
 # from tensorflow.keras.layers import LSTM
+from tensorflow import keras
 from keras.layers import (
     LSTM,
     Dense,
-    Dropout,
     Sequential,
+    Dropout,
 )
-from tensorflow import keras
 import pandas as pd
 import numpy as np
 
@@ -136,8 +136,8 @@ def make_prefix_model_and_save(country:str):
     model.save(f'model_prefix_{country}.h5')
     print('Model saved')
 
-def return_model(data,country):
-    if (data=="prefix"):
+def return_model(input_preference,country):
+    if (input_preference=="prefix"):
         make_prefix_model_and_save(country=country)
     else:
         make_suffix_model_and_save(country=country)

@@ -6,6 +6,7 @@ from rest_framework import generics , status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .utils import generate_new_names, med_count , check_phonetically_sound , check_phonetically_sound , check_fuzzy_wuzzy , check_sound_similarity
+from lstm_model import return_model
 # Create your views here.
 
 class SuggestionViewSet(viewsets.ModelViewSet):
@@ -34,6 +35,7 @@ class CreateSuggestionView(APIView):
             inputType=serializer.data.get('inputType')
             inputTypePreference=serializer.data.get('inputTypePreference')
             listOfString = suggestionString.split(",")
+            # return_model(inputTypePreference,country=country_name)
             print(listOfString)
             final_list_as_a_str = []
             for prefix in listOfString:
@@ -45,7 +47,10 @@ class CreateSuggestionView(APIView):
                 for word in temp_list:
                     if len(word)<3:
                         temp_list.remove(word)
-                        # TODO: add med_count
+                temp_list = check_fuzzy_wuzzy(temp_list)
+                temp_list = check_phonetically_sound(temp_list)
+                temp_list = check_sound_similarity(temp_list)
+                # temp_list = med_count(temp_list)
                 final_list = temp_list
                 temp_final_list_as_a_str = ",".join(final_list)
                 final_list_as_a_str.append(temp_final_list_as_a_str)
